@@ -22,11 +22,13 @@ inoremap JK <esc>
 inoremap Jk <esc>
 
 autocmd vimenter * ++nested colorscheme gruvbox
+au BufRead,BufNewFile *.sbt,*.sc set filetype=scala
 
 "vimplug
 call plug#begin()
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'preservim/nerdtree'
@@ -54,6 +56,7 @@ let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 
+"gnvim font + disable transparency in gnvim
 if exists('g:gnvim')
 	set guifont=Fira\ Code\ Retina:h12
 else
