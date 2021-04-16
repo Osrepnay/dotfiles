@@ -11,15 +11,16 @@ noremap ; l
 noremap l j
 noremap k k
 noremap j h
-
 noremap <C-w>; <C-w>l
 noremap <C-w>l <C-w>j
 noremap <C-w>k <C-w>k
 noremap <C-w>j <C-w>h
+nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 inoremap jk <esc>
 inoremap JK <esc>
 inoremap Jk <esc>
+inoremap <silent><expr> <c-space> coc#refresh()
 
 autocmd vimenter * ++nested colorscheme gruvbox
 au BufRead,BufNewFile *.sbt,*.sc set filetype=scala
@@ -58,7 +59,7 @@ let g:airline_symbols.linenr = ''
 
 "gnvim font + disable transparency in gnvim
 if exists('g:gnvim')
-	set guifont=Fira\ Code\ Retina:h12
+    set guifont=Fira\ Code\ Retina:h12
 else
-	autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE
+    autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE
 endif
