@@ -77,6 +77,7 @@ source $ZSH/oh-my-zsh.sh
 # export MANPATH="/usr/local/man:$MANPATH"
 
 export PATH="$PATH:$HOME/bin"
+export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
@@ -98,8 +99,7 @@ export PATH="$PATH:$HOME/bin"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias vim="nvim"
-
-
 eval $(thefuck --alias)
 alias curls='curl --data-binary @- curls.it'
+alias vim="nvim"
+alias rm="confirmrm"
