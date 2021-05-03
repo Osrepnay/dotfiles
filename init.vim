@@ -22,6 +22,9 @@ inoremap JK <esc>
 inoremap Jk <esc>
 inoremap <silent><expr> <c-space> coc#refresh()
 
+"sudo save
+command! -nargs=0 Sw w !sudo tee % > /dev/null
+
 autocmd vimenter * ++nested colorscheme gruvbox
 au BufRead,BufNewFile *.sbt,*.sc set filetype=scala
 

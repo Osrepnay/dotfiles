@@ -1,8 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Path to your oh-my-zsh installation.
-export ZSH="/home/lenovo/.oh-my-zsh"
+export ZSH="/usr/share/oh-my-zsh/"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -99,7 +98,8 @@ export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-eval $(thefuck --alias)
-alias curls='curl --data-binary @- curls.it'
+alias curls="curl --data-binary @- curls.it"
 alias vim="nvim"
-alias rm="confirmrm"
+alias steam="LD_PRELOAD='/usr/lib/libasound.so.2:/usr/lib64/libasound.so.2' /usr/bin/steam"
+# idk either
+alias dzen2="dzen2 -dock"
