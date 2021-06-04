@@ -17,6 +17,14 @@ noremap <C-w>k <C-w>k
 noremap <C-w>j <C-w>h
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
+function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    else
+        call CocAction('doHover')
+    endif
+endfunction
+
 inoremap jk <esc>
 inoremap JK <esc>
 inoremap Jk <esc>
