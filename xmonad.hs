@@ -10,6 +10,7 @@ import XMonad.Hooks.SetWMName
 import XMonad.Layout.Gaps
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
+import XMonad.Layout.StateFull
 import qualified XMonad.StackSet as StackSet
 import XMonad.Util.EZConfig
 import XMonad.Util.SpawnOnce
@@ -54,7 +55,7 @@ myLayoutHook =
     spacingRaw True (Border 8 8 8 8) True (Border 8 8 8 8) True $
     smartBorders $
     avoidStruts $
-    noBorders Full ||| tall
+    noBorders StateFull ||| tall
     where
         tall = Tall 1 0.1 0.5
 
@@ -65,6 +66,7 @@ myManageHook = composeAll
 
 myKeybindings x = mkKeymap x
     [ ("<Print>", spawn "flameshot gui")
+    , ("M-p", spawn "flameshot gui")
     , ("M-s", spawn "rofi -show drun")
     , ("M-t", spawn $ terminal x)
     , ("<XF86AudioLowerVolume>", spawn "pamixer -d 7")
@@ -92,6 +94,7 @@ defaultKeybindingsToRemove x =
     , (modMask x .|. shiftMask, xK_k)
     , (modMask x .|. shiftMask, xK_l)
     , (modMask x, xK_t)
+    , (modMask x, xK_p)
     ]
 
 myLogHook = fadeInactiveLogHook 0.85
