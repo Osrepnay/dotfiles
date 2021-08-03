@@ -1,13 +1,15 @@
 import Control.Monad (join, when)
 import qualified Data.Map as Map
 import Data.Maybe (maybeToList)
-import XMonad
+import XMonad hiding ((|||))
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
+import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.Gaps
+import XMonad.Layout.LayoutCombinators
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
 import XMonad.Layout.StateFull
@@ -55,9 +57,10 @@ myLayoutHook =
     spacingRaw True (Border 8 8 8 8) True (Border 8 8 8 8) True $
     smartBorders $
     avoidStruts $
-    noBorders StateFull ||| tall
+    noBorders StateFull ||| tall ||| emptyBSP
     where
         tall = Tall 1 0.1 0.5
+layouts = ["StateFull", "Tall", "BinarySpacePartition"]
 
 myManageHook = composeAll
     [ isFullscreen                  --> doFullFloat
@@ -68,6 +71,8 @@ myKeybindings x = mkKeymap x
     [ ("<Print>", spawn "flameshot gui")
     , ("M-p", spawn "flameshot gui")
     , ("M-s", spawn "rofi -show drun")
+    , ("M-S-s", spawn "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'")
+    , ("M-e", spawn "rofi -modi 'emoji:rofimoji --action copy' -show emoji")
     , ("M-t", spawn $ terminal x)
     , ("<XF86AudioLowerVolume>", spawn "pamixer -d 7")
     , ("<XF86AudioRaiseVolume>", spawn "pamixer -i 7")
@@ -80,6 +85,9 @@ myKeybindings x = mkKeymap x
     , ("M-S-k", windows StackSet.swapUp)
     , ("M-S-l", windows StackSet.swapDown)
     , ("M-S-t", withFocused $ windows . StackSet.sink)
+    , ("M-x", sendMessage $ JumpToLayout "StateFull")
+    , ("M-c", sendMessage $ JumpToLayout "Tall")
+    , ("M-v", sendMessage $ JumpToLayout "BinarySpacePartition")
     ]
 
 defaultKeybindingsToRemove x =
@@ -95,6 +103,7 @@ defaultKeybindingsToRemove x =
     , (modMask x .|. shiftMask, xK_l)
     , (modMask x, xK_t)
     , (modMask x, xK_p)
+    , (modMask x, xK_space)
     ]
 
-myLogHook = fadeInactiveLogHook 0.85
+myLogHook = fadeOutLogHook $ fadeIf (not <$> (title =? "Picture-in-Picture") <&&> isUnfocused) 0.85
