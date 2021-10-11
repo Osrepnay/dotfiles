@@ -17,21 +17,18 @@ noremap <C-w>k <C-w>k
 noremap <C-w>j <C-w>h
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-"function! s:show_documentation()
-"    if (index(['vim','help'], &filetype) >= 0)
-"        execute 'h '.expand('<cword>')
-"    else
-"        call CocAction('doHover')
-"    endif
-"endfunction
-
+imap <silent> <C-Space> <Plug>(completion_trigger)
 inoremap jk <esc>
 inoremap JK <esc>
 inoremap Jk <esc>
-"inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+filetype plugin indent on
 
 autocmd vimenter * ++nested colorscheme gruvbox
 au BufRead,BufNewFile *.sbt,*.sc set filetype=scala
+au! BufNewFile,BufRead *.svelte set ft=html
 
 "vimplug
 call plug#begin()
@@ -39,6 +36,8 @@ call plug#begin()
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/completion-nvim'
+Plug 'sbdchd/neoformat'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'preservim/nerdtree'
@@ -50,6 +49,8 @@ call plug#end()
 lua << EOF
 local lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
+    require('completion').on_attach(client, bufnr)
+
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -70,7 +71,7 @@ local on_attach = function(client, bufnr)
     buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
     buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 end
-local servers = { "rust_analyzer" }
+local servers = { "rust_analyzer", "hls" }
 for _, lsp_name in ipairs(servers) do
     lsp[lsp_name].setup {
         on_attach = on_attach,
@@ -78,14 +79,6 @@ for _, lsp_name in ipairs(servers) do
     }
 end
 EOF
-
-"syntastic
-set statusline+=%#warningmsg#
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
 
 "airline
 let g:airline_symbols = {}
@@ -98,6 +91,10 @@ let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
+
+"completion-nvim
+let g:completion_enable_auto_popup = 0
+let g:completion_matching_ignore_case = 1
 
 "gnvim font + disable transparency in gnvim
 if exists('g:gnvim')

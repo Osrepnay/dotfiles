@@ -5,5 +5,6 @@ configuration {
     font: "Fira Code 14";
     show-icons: true;
     icon-theme: "Qogir";
+    terminal: "kitty";
 }
 @import "/home/archbox/.config/rofi/themes/gruvbox-transparent-dark.rasi"

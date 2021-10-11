@@ -1,1 +1,0 @@
-/home/archbox/lemonbarscript.py
