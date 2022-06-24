@@ -101,13 +101,8 @@ riverctl map normal $mod+Shift T toggle-float
 # Mod+F to toggle fullscreen
 riverctl map normal $mod F toggle-fullscreen
 
-# Mod+{Up,Right,Down,Left} to change layout orientation
-riverctl map normal $mod V       send-layout-cmd rivercarro "main-location top"
-riverctl map normal $mod+Shift V send-layout-cmd rivercarro "main-location bottom"
-riverctl map normal $mod B       send-layout-cmd rivercarro "main-location left"
-riverctl map normal $mod+Shift B send-layout-cmd rivercarro "main-location right"
-
-riverctl map normal $mod X       send-layout-cmd rivercarro "main-location monocle"
+riverctl map normal $mod C send-layout-cmd rivercarro "main-location left"
+riverctl map normal $mod X send-layout-cmd rivercarro "main-location monocle"
 
 # Declare a passthrough mode. This mode has only a single mapping to return to
 # normal mode. This makes it useful for testing a nested wayland compositor
@@ -119,8 +114,7 @@ riverctl map normal $mod F11 enter-mode passthrough
 # Mod+F11 to return to normal mode
 riverctl map passthrough $mod F11 enter-mode normal
 
-# lock
-riverctl map normal $mod+Control L spawn "swaylock"
+riverctl map normal $mod+Alt L spawn "swaylock"
 
 # launcher
 riverctl map normal $mod S spawn "fuzzel -f \"sans-serif\" -T \"kitty -e\" -b \"282828e0\" -t \"ebdbb2ff\" -m \"fb3934ff\" -s \"1d2021f0\" -S \"ebdbb2ff\""
@@ -131,9 +125,6 @@ for mode in normal locked
 do
 
     riverctl map $mode None Print spawn "grim -g \"\$(slurp)\" - | swappy -f -"
-
-    # Eject the optical drive
-    riverctl map $mode None XF86Eject spawn 'eject -T'
 
     # Control pulse audio volume with pamixer (https://github.com/cdemoulins/pamixer)
     riverctl map $mode None XF86AudioRaiseVolume  spawn 'pamixer -i 5'
@@ -155,27 +146,28 @@ done
 riverctl background-color 0x1d2021
 riverctl border-color-focused 0xb8bb26
 riverctl border-color-unfocused 0x1d2021
+riverctl border-width 3
 
 # Set repeat rate
-riverctl set-repeat 50 300
+riverctl set-repeat 25 660
 
 # Make certain views start floating
 riverctl float-filter-add app-id float
 riverctl float-filter-add title "Picture-in-Picture"
 
-# Set app-ids and titles of views which should use client side decorations
-riverctl csd-filter-add app-id "gedit"
-
 riverctl focus-follows-cursor normal
 
-riverctl input 1390:252:ELECOM_ELECOM_TrackBall_Mouse accel-profile flat
+riverctl input pointer-1390-296-ELECOM_TrackBall_Mouse_EX-G_Pro_TrackBall_Mouse accel-profile flat
 
 # Startup commands
+export XDG_CURRENT_DESKTOP=river
+systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+# dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river # gtk stuff
+wmname LG3D # java
 import-gsettings
-wlsunset -t 4800 -g 1.15 &
+gammastep -PO 4800 -g1.15 &
 waybar &
-/usr/lib/xdg-desktop-portal -vr & /usr/lib/xdg-desktop-portal-wlr &
 mako &
 
 riverctl default-layout rivercarro
-exec rivercarro
+exec rivercarro -main-ratio 0.5
