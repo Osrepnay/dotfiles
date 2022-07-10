@@ -125,6 +125,8 @@ for mode in normal locked
 do
 
     riverctl map $mode None Print spawn "grim -g \"\$(slurp)\" - | swappy -f -"
+    # screenshot without slurp
+    riverctl map $mode Shift Print spawn "grim - | swappy -f -"
 
     # Control pulse audio volume with pamixer (https://github.com/cdemoulins/pamixer)
     riverctl map $mode None XF86AudioRaiseVolume  spawn 'pamixer -i 5'
@@ -157,7 +159,9 @@ riverctl float-filter-add title "Picture-in-Picture"
 
 riverctl focus-follows-cursor normal
 
-riverctl input pointer-1390-296-ELECOM_TrackBall_Mouse_EX-G_Pro_TrackBall_Mouse accel-profile flat
+MYMOUSE=pointer-1390-296-ELECOM_TrackBall_Mouse_EX-G_Pro_TrackBall_Mouse
+riverctl input $MYMOUSE accel-profile flat
+riverctl input $MYMOUSE pointer-accel -0.4
 
 # Startup commands
 export XDG_CURRENT_DESKTOP=river
@@ -168,6 +172,7 @@ import-gsettings
 gammastep -PO 4800 -g1.15 &
 waybar &
 mako &
+swaybg -i ~/Downloads/bliss.png &
 
 riverctl default-layout rivercarro
 exec rivercarro -main-ratio 0.5
