@@ -24,7 +24,6 @@ nnoremap <leader>t :bnext<CR>
 nnoremap <leader>T :bprevious<CR>
 
 inoremap jk <esc>
-inoremap JK <esc>
 inoremap Jk <esc>
 inoremap jK <esc>
 
@@ -69,7 +68,7 @@ local on_attach = function(client, bufnr)
     buf_set_keymap("n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
     buf_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
 end
-local servers = { "rust_analyzer", "hls", "clangd" }
+local servers = { "rust_analyzer", "hls", "ccls" }
 for _, lsp_name in ipairs(servers) do
     lsp[lsp_name].setup {
         on_attach = on_attach,
@@ -82,7 +81,8 @@ local remap = vim.api.nvim_set_keymap
 vim.g.coq_settings = {
     -- ["completion.always"] = false,
     ["auto_start"] = true,
-    ["keymap.recommended"] = false
+    ["keymap.recommended"] = false,
+    ["display.icons.mode"] = "none"
 }
 -- we have to remap insted of using keymap.recommended because npairs overrides cr and bs, hooray
 local keys_for_coq = { "<esc>", "<c-c>", "<c-w>", "<c-u>"}
@@ -94,8 +94,7 @@ remap("i", "<tab>", "pumvisible() ? '<c-n>' : '<tab>'", { expr = true, noremap =
 remap("i", "<s-tab>", "pumvisible() ? '<c-p>' : '<bs>'", { expr = true, noremap = true })
 
 local npairs = require("nvim-autopairs")
-npairs.setup { map_bs = false, map_cr = false }
-
+npairs.setup { map_bs = true, map_cr = false }
 _G.MUtils = {}
 MUtils.CR = function()
     if vim.fn.pumvisible() ~= 0 then
