@@ -11,7 +11,7 @@
 # Use the "logo" key as the primary modifier
 mod="Mod4"
 
-# Mod+T to start an instance of kitty
+# Mod+T to start an instance of foot
 riverctl map normal $mod T spawn "foot"
 
 # Mod+Shift+C to close the focused view
@@ -117,7 +117,7 @@ riverctl map passthrough $mod F11 enter-mode normal
 riverctl map normal $mod+Alt L spawn "swaylock"
 
 # launcher
-riverctl map normal $mod S spawn "fuzzel -f \"sans-serif\" -T \"kitty -e\" -b \"282828e0\" -t \"ebdbb2ff\" -m \"fb3934ff\" -s \"1d2021f0\" -S \"ebdbb2ff\""
+riverctl map normal $mod S spawn "fuzzel -f \"sans-serif\" -T \"foot -e\" -b \"282828e0\" -t \"ebdbb2ff\" -m \"fb3934ff\" -s \"1d2021f0\" -S \"ebdbb2ff\""
 
 # Various media key mapping examples for both normal and locked mode which do
 # not have a modifier
@@ -157,7 +157,7 @@ riverctl set-repeat 25 660
 riverctl float-filter-add app-id float
 riverctl float-filter-add title "Picture-in-Picture"
 
-# riverctl focus-follows-cursor normal
+riverctl focus-follows-cursor normal
 
 MYMOUSE=pointer-1390-296-ELECOM_TrackBall_Mouse_EX-G_Pro_TrackBall_Mouse
 riverctl input $MYMOUSE accel-profile flat
