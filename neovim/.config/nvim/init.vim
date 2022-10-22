@@ -3,7 +3,8 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
-set smartindent
+" set smartindent screw you smartindent!
+set autoindent 
 set number
 set relativenumber
 let mapleader = ','
@@ -39,7 +40,9 @@ autocmd! BufNewFile,BufRead *.svelte set filetype=html
 call plug#begin()
 
 Plug 'neovim/nvim-lspconfig'
-Plug 'ms-jpq/coq_nvim', { 'branch': 'coq' }
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
 Plug 'windwp/nvim-autopairs'
 Plug 'pangloss/vim-javascript'
 Plug 'neovimhaskell/haskell-vim'
@@ -57,6 +60,37 @@ let g:haskell_indent_after_bare_where = 2
 
 "lua bits
 lua << EOF
+local cmp = require'cmp'
+
+cmp.setup({
+    snippet = {
+        expand = function() end
+    },
+    window = {},
+    mapping = cmp.mapping.preset.insert({
+        ['<Tab>'] = function(fallback)
+            if cmp.visible() then
+                cmp.select_next_item()
+            else
+                fallback()
+            end
+        end,
+        ['<S-Tab>'] = function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            else
+                fallback()
+            end
+        end,
+        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.abort(),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    }),
+    sources = cmp.config.sources({{ name = 'nvim_lsp' }}, {{ name = 'buffer' }})
+})
+
 local lsp = require("lspconfig")
 local on_attach = function(client, bufnr)
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -68,7 +102,7 @@ local on_attach = function(client, bufnr)
     buf_set_keymap("n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
     buf_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
 end
-local servers = { "rust_analyzer", "hls", "ccls" }
+local servers = { "rust_analyzer", "hls", "clangd" }
 for _, lsp_name in ipairs(servers) do
     lsp[lsp_name].setup {
         on_attach = on_attach,
@@ -76,14 +110,8 @@ for _, lsp_name in ipairs(servers) do
     }
 end
 
-local remap = vim.api.nvim_set_keymap
+--[[local remap = vim.api.nvim_set_keymap
 
-vim.g.coq_settings = {
-    -- ["completion.always"] = false,
-    ["auto_start"] = true,
-    ["keymap.recommended"] = false,
-    ["display.icons.mode"] = "none"
-}
 -- we have to remap insted of using keymap.recommended because npairs overrides cr and bs, hooray
 local keys_for_coq = { "<esc>", "<c-c>", "<c-w>", "<c-u>"}
 for _, key in ipairs(keys_for_coq) do
@@ -115,7 +143,9 @@ MUtils.BS = function()
     end
 end
 remap("i", "<cr>", "v:lua.MUtils.CR()", { expr = true, noremap = true })
-remap("i", "<bs>", "v:lua.MUtils.BS()", { expr = true, noremap = true })
+remap("i", "<bs>", "v:lua.MUtils.BS()", { expr = true, noremap = true })]]
+local npairs = require("nvim-autopairs")
+npairs.setup { map_bs = true, map_cr = true }
 
 
 require("tabline").setup {}

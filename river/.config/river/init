@@ -114,7 +114,7 @@ riverctl map normal $mod F11 enter-mode passthrough
 # Mod+F11 to return to normal mode
 riverctl map passthrough $mod F11 enter-mode normal
 
-riverctl map normal $mod+Alt L spawn "swaylock"
+riverctl map normal $mod+Alt B spawn "swaylock"
 
 # launcher
 riverctl map normal $mod S spawn "fuzzel -f \"sans-serif\" -T \"foot -e\" -b \"282828e0\" -t \"ebdbb2ff\" -m \"fb3934ff\" -s \"1d2021f0\" -S \"ebdbb2ff\""
@@ -124,7 +124,7 @@ riverctl map normal $mod S spawn "fuzzel -f \"sans-serif\" -T \"foot -e\" -b \"2
 for mode in normal locked
 do
 
-    riverctl map $mode None Print spawn "grim -g \"\$(slurp)\" - | swappy -f -"
+    riverctl map $mode None Print spawn "swappyshot"
     # screenshot without slurp
     riverctl map $mode Shift Print spawn "grim - | swappy -f -"
 
@@ -172,7 +172,7 @@ import-gsettings
 gammastep -PO 4800 -g1.15 &
 waybar &
 mako &
-swaybg -i ~/Downloads/bliss.png &
+swaybg -i ~/bgs/alpenglow.jpg &
 lxpolkit &
 
 riverctl default-layout rivercarro
