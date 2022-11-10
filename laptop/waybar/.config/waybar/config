@@ -1,0 +1,24 @@
+{
+    "height": 24,
+    // "modules-left": ["river/tags"],
+    "modules-right": ["pulseaudio", "cpu", "memory", "battery", "clock"],
+    "pulseaudio": {
+        "format": "VOL {volume}%",
+    },
+    "cpu": {
+        "interval": 1,
+        "format": "CPU {usage}%"
+    },
+    "memory": {
+        "interval": 2,
+        "format": "MEM {percentage}%"
+    },
+    "battery": {
+        "interval": 3,
+        "format": "BAT {power}W {capacity}% {time} left"
+    },
+    "clock": {
+        "interval": 3,
+        "format": "{:%a %b %d %I:%M:%S%p}"
+    }
+}
