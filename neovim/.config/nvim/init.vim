@@ -10,14 +10,14 @@ set relativenumber
 let mapleader = ','
 let c_no_curly_error = 1 " compound literal highlighting broke
 
-noremap ; l
-noremap l j
-noremap k k
-noremap j h
-noremap <C-w>; <C-w>l
-noremap <C-w>l <C-w>j
-noremap <C-w>k <C-w>k
-noremap <C-w>j <C-w>h
+"noremap ; l
+"noremap l j
+"noremap k k
+"noremap j h
+"noremap <C-w>; <C-w>l
+"noremap <C-w>l <C-w>j
+"noremap <C-w>k <C-w>k
+"noremap <C-w>j <C-w>h
 
 nnoremap <leader>b :buffers<CR>:buffer<Space>
 nnoremap <leader>d :buffers<CR>:bdelete<Space>
