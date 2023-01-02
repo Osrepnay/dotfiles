@@ -43,12 +43,22 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
-Plug 'windwp/nvim-autopairs'
-Plug 'pangloss/vim-javascript'
-Plug 'neovimhaskell/haskell-vim'
-Plug 'sbdchd/neoformat'
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+
 Plug 'crispgm/nvim-tabline'
 Plug 'nvim-lualine/lualine.nvim'
+
+Plug 'windwp/nvim-autopairs'
+Plug 'sbdchd/neoformat'
+
+Plug 'pangloss/vim-javascript'
+" Plug 'neovimhaskell/haskell-vim'
+
 Plug 'morhetz/gruvbox'
 
 call plug#end()
@@ -57,6 +67,7 @@ call plug#end()
 let g:haskell_indent_case = 4
 let g:haskell_indent_before_where = 2
 let g:haskell_indent_after_bare_where = 2
+let g:haskell_indent_guard = 4
 
 "lua bits
 lua << EOF
@@ -92,15 +103,28 @@ cmp.setup({
 })
 
 local lsp = require("lspconfig")
+local opts = { noremap=true, silent=true }
+vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 local on_attach = function(client, bufnr)
-    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-    buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+    -- Enable completion triggered by <c-x><c-o>
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-    local opts = { noremap = true, silent = true }
-    buf_set_keymap("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
-    buf_set_keymap("n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-    buf_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
+    -- Mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    local bufopts = { noremap=true, silent=true, buffer=bufnr }
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+    vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+    vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 end
 local servers = { "rust_analyzer", "hls", "clangd" }
 for _, lsp_name in ipairs(servers) do
@@ -110,43 +134,43 @@ for _, lsp_name in ipairs(servers) do
     }
 end
 
---[[local remap = vim.api.nvim_set_keymap
+require'nvim-treesitter.configs'.setup {
+    -- A list of parser names, or "all"
+    ensure_installed = { "c", "rust", "haskell" },
 
--- we have to remap insted of using keymap.recommended because npairs overrides cr and bs, hooray
-local keys_for_coq = { "<esc>", "<c-c>", "<c-w>", "<c-u>"}
-for _, key in ipairs(keys_for_coq) do
-    remap("i", key, string.format("pumvisible() ? '<c-e>%s' : '%s'", key, key), { expr = true, noremap = true })
-end
--- tab and shift tab are special
-remap("i", "<tab>", "pumvisible() ? '<c-n>' : '<tab>'", { expr = true, noremap = true })
-remap("i", "<s-tab>", "pumvisible() ? '<c-p>' : '<bs>'", { expr = true, noremap = true })
+    -- Install parsers synchronously (only applied to `ensure_installed`)
+    sync_install = false,
 
-local npairs = require("nvim-autopairs")
-npairs.setup { map_bs = true, map_cr = false }
-_G.MUtils = {}
-MUtils.CR = function()
-    if vim.fn.pumvisible() ~= 0 then
-        if vim.fn.complete_info { "selected" }.selected ~= -1 then
-            return npairs.esc("<c-y>")
-        else
-            return npairs.esc("<c-e>") .. npairs.autopairs_cr()
-        end
-    else
-        return npairs.autopairs_cr()
-    end
-end
-MUtils.BS = function()
-    if vim.fn.pumvisible() ~= 0 and vim.fn.complete_info { "mode" }.mode == "eval" then
-        return npairs.esc("<c-e>") .. npairs.autopairs_bs()
-    else
-        return npairs.autopairs_bs()
-    end
-end
-remap("i", "<cr>", "v:lua.MUtils.CR()", { expr = true, noremap = true })
-remap("i", "<bs>", "v:lua.MUtils.BS()", { expr = true, noremap = true })]]
+    -- Automatically install missing parsers when entering buffer
+    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+    auto_install = false,
+
+    -- List of parsers to ignore installing (for "all")
+    ignore_install = {},
+
+    ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+    -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+
+    highlight = {
+        -- `false` will disable the whole extension
+        enable = true,
+
+        -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
+        -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
+        -- the name of the parser)
+        -- list of language that will be disabled
+        disable = {},
+
+        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- Using this option may slow down your editor, and you may see some duplicate highlights.
+        -- Instead of true it can also be a list of languages
+        additional_vim_regex_highlighting = false,
+    },
+}
+
 local npairs = require("nvim-autopairs")
 npairs.setup { map_bs = true, map_cr = true }
-
 
 require("tabline").setup {}
 require("lualine").setup {
