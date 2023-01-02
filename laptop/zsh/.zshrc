@@ -7,7 +7,7 @@ setopt AUTO_CONTINUE
 alias curls="curl --data-binary @- curls.it"
 
 export GPG_TTY=$TTY
-[ -f "/home/jimtopher/.ghcup/env" ] && source "/home/jimtopher/.ghcup/env" # ghcup-env
+#[ -f "/home/jimtopher/.ghcup/env" ] && source "/home/jimtopher/.ghcup/env" # ghcup-env
 
 # https://unix.stackexchange.com/q/home/jimtopher/.zsh_history_alt
 HISTSIZE=500000
@@ -18,3 +18,5 @@ setopt SHARE_HISTORY
 
 # disown after ctrlz also restarts the process
 setopt AUTO_CONTINUE
+
+[ -f "/home/jimtopher/.ghcup/env" ] && source "/home/jimtopher/.ghcup/env" # ghcup-env
