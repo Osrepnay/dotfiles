@@ -76,6 +76,8 @@ riverctl map-pointer floating-manage None BTN_TASK enter-mode normal
 riverctl map-pointer floating-manage None BTN_LEFT move-view
 riverctl map-pointer floating-manage None BTN_RIGHT resize-view
 riverctl map-pointer floating-manage None BTN_BACK toggle-float
+riverctl map-pointer normal $mod BTN_RIGHT resize-view
+riverctl map-pointer normal $mod BTN_BACK toggle-float
 
 for i in $(seq 1 9)
 do
@@ -174,7 +176,7 @@ systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 # dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river # gtk stuff
 wmname LG3D # java
 import-gsettings
-gammastep -PO 4800 -g1.15 &
+gammastep -PO 4800 &
 waybar &
 mako &
 swaybg -i ~/bgs/alpenglow.jpg &
