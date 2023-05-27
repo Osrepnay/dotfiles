@@ -168,8 +168,9 @@ riverctl rule-add float -title "Picture-in-Picture"
 riverctl focus-follows-cursor always
 
 MYMOUSE=pointer-1241-41217-HID_04d9:a101
-riverctl input $MYMOUSE accel-profile adaptive
-riverctl input $MYMOUSE pointer-accel 0
+# own river patch!
+riverctl input $MYMOUSE accel-profile custom
+riverctl input $MYMOUSE custom-accel 130 0.3 1.5 1.5
 riverctl input $MYMOUSE scroll-button BTN_MIDDLE
 riverctl input $MYMOUSE scroll-method button
 
@@ -179,11 +180,11 @@ systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 # dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river # gtk stuff
 wmname LG3D # java
 import-gsettings
+
+riverctl default-layout rivercarro
 gammastep -PO 4800 &
 waybar &
 mako &
 swaybg -i ~/bgs/alpenglow.jpg &
 lxpolkit &
-
-riverctl default-layout rivercarro
-exec rivercarro -main-ratio 0.5 -inner-gaps 6 -outer-gaps 6
+rivercarro -main-ratio 0.5 -inner-gaps 6 -outer-gaps 6 &
