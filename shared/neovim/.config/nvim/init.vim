@@ -43,6 +43,7 @@ Plug 'nvim-lualine/lualine.nvim'
 
 Plug 'windwp/nvim-autopairs'
 Plug 'sbdchd/neoformat'
+Plug 'tpope/vim-sleuth'
 
 Plug 'pangloss/vim-javascript'
 " Plug 'neovimhaskell/haskell-vim'

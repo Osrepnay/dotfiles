@@ -73,7 +73,7 @@ window#waybar.chromium {
 #temperature,
 #backlight,
 #network,
-#pulseaudio,
+#wireplumber,
 #custom-media,
 #tray,
 #mode,
@@ -158,12 +158,12 @@ label:focus {
     background-color: #f53c3c;
 }
 
-#pulseaudio {
+#wireplumber {
     background-color: #f1c40f;
     color: #000000;
 }
 
-#pulseaudio.muted {
+#wireplumber.muted {
     background-color: #90b1b1;
     color: #2a5c45;
 }
