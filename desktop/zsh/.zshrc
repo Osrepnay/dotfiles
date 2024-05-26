@@ -17,5 +17,3 @@ setopt SHARE_HISTORY
 
 # disown after ctrlz also restarts the process
 setopt AUTO_CONTINUE
-
-[ -f "/home/jimothy/.ghcup/env" ] && source "/home/jimothy/.ghcup/env" # ghcup-env

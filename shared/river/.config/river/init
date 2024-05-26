@@ -1,5 +1,8 @@
 #!/bin/sh
 
+set -E
+trap 'echo Failed on line: $LINENO' ERR
+
 # super
 mod="Mod4"
 
@@ -95,14 +98,15 @@ for mode in normal locked; do
 done
 
 riverctl background-color 0x1d2021
-riverctl border-color-focused 0xb8bb26
+riverctl border-color-focused 0xfabd2f
 riverctl border-color-unfocused 0x1d2021
+riverctl border-color-urgent 0xfb4934
 riverctl border-width 3
 
 # Set repeat rate
 riverctl set-repeat 25 660
 
-riverctl rule-add float -title "Picture-in-Picture"
+riverctl rule-add -title "Picture-in-Picture" float
 riverctl rule-add ssd
 
 riverctl focus-follows-cursor always
@@ -112,23 +116,26 @@ LT=pointer-1133-4136-Logitech_M570
 LM=pointer-1133-16468-Logitech_Wireless_Mouse
 TP=pointer-1267-32-Elan_Touchpad
 
+# patch gone, use flat now
 # own river patch!
-riverctl input $SG accel-profile custom
-riverctl input $SG custom-accel 130 0.3 1.5 1.5
-riverctl input $SG scroll-button BTN_MIDDLE
-riverctl input $SG scroll-method button
+# riverctl input $SG accel-profile custom
+# riverctl input $SG custom-accel 130 0.3 1.5 1.5
+# riverctl input $SG scroll-button BTN_MIDDLE
+# riverctl input $SG scroll-method button
 
-riverctl input $LT accel-profile custom
-riverctl input $LT custom-accel 1 2 2
-riverctl input $LT scroll-button BTN_MIDDLE
-riverctl input $LT scroll-method button
+riverctl input $LT accel-profile adaptive
+riverctl input $LT pointer-accel 0
+# riverctl input $LT accel-profile custom
+# riverctl input $LT custom-accel 1 2 2
+# riverctl input $LT scroll-button BTN_MIDDLE
+# riverctl input $LT scroll-method button
 
 riverctl input $LM accel-profile flat
-riverctl input $LM poitner-accel 1
+riverctl input $LM pointer-accel 1
 
 riverctl input $TP tap enabled
-riverctl input $TP accel-profile flat
-riverctl input $TP pointer-accel 1.3
+riverctl input $TP accel-profile adaptive
+riverctl input $TP pointer-accel 0
 
 export XDG_CURRENT_DESKTOP=river
 systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
@@ -140,6 +147,6 @@ riverctl default-layout rivercarro
 gammastep -PO 4800 &
 waybar &
 mako &
-swaybg -i ~/bgs/alpenglow.jpg &
+swaybg -i ~/bgs/alpenglow.jpg -m fill &
 lxpolkit &
-rivercarro -main-ratio 0.5 -inner-gaps 6 -outer-gaps 6 &
+rivercarro -main-ratio 0.5 -inner-gaps 16 -outer-gaps 16 &
