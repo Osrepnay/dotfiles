@@ -1,0 +1,2 @@
+ACTION=="add|change", KERNEL=="event*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c52b", TAG+="systemd", ENV{SYSTEMD_WANTS}="accelerator@logitechrecv.service", SYMLINK+="logitechrecv"
+ACTION=="add|change", KERNEL=="event*", SUBSYSTEMS=="input", ATTRS{name} == "Ploopy Corporation Ploopy Adept Trackball Mouse", ATTRS{id/vendor}=="5043", ATTRS{id/product}=="5c47", TAG+="systemd", ENV{SYSTEMD_WANTS}="accelerator@adept.service", SYMLINK+="adept"

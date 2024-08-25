@@ -7,7 +7,10 @@ set autoindent
 set number
 set relativenumber
 let mapleader = ','
+let maplocalleader = '\'
 let c_no_curly_error = 1 " compound literal highlighting broke
+
+filetype plugin indent on
 
 inoremap jk <esc>
 inoremap Jk <esc>
@@ -19,11 +22,15 @@ nnoremap <leader>bd :buffers<CR>:bdelete<Space>
 nnoremap <leader>bt :bnext<CR>
 nnoremap <leader>bT :bprevious<CR>
 
-filetype plugin indent on
-
-autocmd vimenter * ++nested colorscheme gruvbox
 autocmd InsertEnter * :set norelativenumber
 autocmd InsertLeave * :set relativenumber
+
+let g:vimsyn_embed = 'l'
+
+let g:conjure#filetypes = ['clojure', 'fennel', 'janet', 'hy', 'julia', 'racket', 'scheme', 'lua', 'lisp', 'python', 'sql']
+" lsp should take care of this, keybinds overlap
+let g:conjure#mapping#def_word = v:false
+let g:conjure#mapping#doc_word = v:false
 
 " vimplug
 call plug#begin()
@@ -35,32 +42,33 @@ Plug 'hrsh7th/cmp-buffer'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.x' }
-
-Plug 'crispgm/nvim-tabline'
-Plug 'nvim-lualine/lualine.nvim'
-
 Plug 'windwp/nvim-autopairs'
-Plug 'sbdchd/neoformat'
+Plug 'stevearc/conform.nvim'
 Plug 'tpope/vim-sleuth'
 
-Plug 'pangloss/vim-javascript'
-" Plug 'neovimhaskell/haskell-vim'
+Plug 'Olical/conjure'
 
-Plug 'morhetz/gruvbox'
+Plug 'nvim-lualine/lualine.nvim'
+
+Plug 'kwkarlwang/bufresize.nvim'
+
+" Plug 'morhetz/gruvbox'
+" https://github.com/morhetz/gruvbox/issues/459
+Plug 'ellisonleao/gruvbox.nvim'
 
 call plug#end()
 
-"haskell-vim
-"let g:haskell_indent_case = 4
-"let g:haskell_indent_before_where = 2
-"let g:haskell_indent_after_bare_where = 2
-"let g:haskell_indent_guard = 4
+colorscheme gruvbox
 
 "lua bits
 lua << EOF
 local cmp = require('cmp')
+local lsp = require('lspconfig')
+local treesitter = require('nvim-treesitter.configs')
+local npairs = require('nvim-autopairs')
+local conform = require('conform')
+local lualine = require('lualine')
+local bufresize = require('bufresize')
 
 cmp.setup({
     snippet = {
@@ -91,7 +99,6 @@ cmp.setup({
     sources = cmp.config.sources({{ name = 'nvim_lsp' }}, {{ name = 'buffer' }})
 })
 
-local lsp = require('lspconfig')
 local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
@@ -107,24 +114,36 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
     vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
     vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-    vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+    vim.keymap.set('n', '<leader>f', conform.format, bufopts)
+
+    vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
 end
-local servers = { "rust_analyzer", "hls", "clangd" }
-for _, lsp_name in ipairs(servers) do
-    lsp[lsp_name].setup {
+local server_names = { 'rust_analyzer', 'hls', 'clangd', 'clojure_lsp' }
+local server_opts = {}
+for _, lsp_name in ipairs(server_names) do
+    server_opts[lsp_name] = {
         on_attach = on_attach,
         flags = { debounce_text_changes = 150 }
     }
 end
+server_opts['hls'].settings = {
+    haskell = {
+        plugin = { rename = { config = { diff = true, crossModule = true } } },
+        cabalFormattingProvider = 'cabalfmt',
+        formattingProvider = 'ormolu'
+    }
+}
+for lsp_name, lsp_opts in pairs(server_opts) do
+    lsp[lsp_name].setup(lsp_opts)
+end
 
-require'nvim-treesitter.configs'.setup {
-    ensure_installed = { "c", "rust", "haskell" },
+treesitter.setup({
+    ensure_installed = { 'c', 'rust', 'haskell', 'clojure' },
     sync_install = false,
     auto_install = false,
     ignore_install = {},
@@ -133,18 +152,25 @@ require'nvim-treesitter.configs'.setup {
         disable = {},
         additional_vim_regex_highlighting = false,
     },
-}
+})
 
-local npairs = require("nvim-autopairs")
-npairs.setup { map_bs = true, map_cr = true }
+npairs.setup({ map_bs = true, map_cr = true })
 
-require("tabline").setup {}
-require("lualine").setup {
+lualine.setup({
     options = {
         icons_enabled = false,
-        theme = "gruvbox",
-        component_separators = { left = "|", right = "|"},
-        section_separators = { left = "", right = ""},
+        theme = 'gruvbox',
+        component_separators = { left = '|', right = '|'},
+        section_separators = { left = '', right = ''},
     }
-}
+})
+
+conform.setup({
+    formatters_by_ft = {
+        clojure = { "zprint" },
+        haskell = { "ormolu" },
+    }
+})
+
+bufresize.setup()
 EOF

@@ -1,0 +1,9 @@
+[Unit]
+Description=Mouse accelerator service
+BindsTo=dev-%i.device
+After=dev-%i.device
+
+[Service]
+Type=simple
+Restart=no
+ExecStart=/usr/bin/accelerator-fileconfig %i

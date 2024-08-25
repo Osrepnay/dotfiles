@@ -115,6 +115,7 @@ SG=pointer-1241-41217-HID_04d9:a101
 LT=pointer-1133-4136-Logitech_M570
 LM=pointer-1133-16468-Logitech_Wireless_Mouse
 TP=pointer-1267-32-Elan_Touchpad
+EX=pointer-1390-252-ELECOM_ELECOM_TrackBall_Mouse
 
 # patch gone, use flat now
 # own river patch!
@@ -123,12 +124,15 @@ TP=pointer-1267-32-Elan_Touchpad
 # riverctl input $SG scroll-button BTN_MIDDLE
 # riverctl input $SG scroll-method button
 
-riverctl input $LT accel-profile adaptive
+riverctl input $LT accel-profile flat
 riverctl input $LT pointer-accel 0
 # riverctl input $LT accel-profile custom
 # riverctl input $LT custom-accel 1 2 2
 # riverctl input $LT scroll-button BTN_MIDDLE
 # riverctl input $LT scroll-method button
+#
+riverctl input $EX accel-profile flat
+riverctl input $EX pointer-accel 0
 
 riverctl input $LM accel-profile flat
 riverctl input $LM pointer-accel 1
