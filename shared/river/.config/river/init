@@ -116,6 +116,7 @@ LT=pointer-1133-4136-Logitech_M570
 LM=pointer-1133-16468-Logitech_Wireless_Mouse
 TP=pointer-1267-32-Elan_Touchpad
 EX=pointer-1390-252-ELECOM_ELECOM_TrackBall_Mouse
+AD=pointer-20547-23623-Ploopy_Corporation_Ploopy_Adept_Trackball_Mouse
 
 # patch gone, use flat now
 # own river patch!
@@ -133,6 +134,9 @@ riverctl input $LT pointer-accel 0
 #
 riverctl input $EX accel-profile flat
 riverctl input $EX pointer-accel 0
+
+riverctl input $AD accel-profile flat
+riverctl input $AD pointer-accel 0
 
 riverctl input $LM accel-profile flat
 riverctl input $LM pointer-accel 1

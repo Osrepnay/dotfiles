@@ -7,7 +7,6 @@
         "max-length": 80,
     },
     "wireplumber": {
-        "interval": 3,
         "format": "  {volume}%",
     },
     "cpu": {
