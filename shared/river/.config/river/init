@@ -28,8 +28,8 @@ riverctl map normal $mod+Shift Comma send-to-output previous
 # rivercarro
 riverctl map normal $mod H send-layout-cmd rivercarro "main-ratio -0.05"
 riverctl map normal $mod L send-layout-cmd rivercarro "main-ratio +0.05"
-riverctl map normal $mod+Shift H send-layout-cmd rivercarro "main-count +1"
-riverctl map normal $mod+Shift L send-layout-cmd rivercarro "main-count -1"
+riverctl map normal $mod+Shift H send-layout-cmd rivercarro "main-count -1"
+riverctl map normal $mod+Shift L send-layout-cmd rivercarro "main-count +1"
 riverctl map normal $mod C send-layout-cmd rivercarro "main-location left"
 riverctl map normal $mod X send-layout-cmd rivercarro "main-location monocle"
 
@@ -152,7 +152,7 @@ wmname LG3D # java
 import-gsettings
 
 riverctl default-layout rivercarro
-gammastep -PO 4800 &
+wlsunset -t 4800 -T 4801 &
 waybar &
 mako &
 swaybg -i ~/bgs/alpenglow.jpg -m fill &
