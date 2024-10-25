@@ -1,0 +1,28 @@
+{
+    "height": 24,
+    "modules-left": ["tray"],
+    "modules-center": ["river/window"],
+    "modules-right": ["wireplumber", "cpu", "memory", "battery", "clock"],
+    "river/window": {
+        "max-length": 80,
+    },
+    "wireplumber": {
+        "format": "VOL {volume}%",
+    },
+    "cpu": {
+        "interval": 10,
+        "format": "CPU {usage}%"
+    },
+    "memory": {
+        "interval": 10,
+        "format": "MEM {percentage}%"
+    },
+    "battery": {
+        "interval": 10,
+        "format": "BAT {capacity}% {power}W"
+    },
+    "clock": {
+        "interval": 10,
+        "format": "{:%a %b %d %I:%M:%S%p}"
+    }
+}
