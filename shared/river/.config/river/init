@@ -73,7 +73,7 @@ riverctl map normal $mod+Shift 0 set-view-tags $all_tags
 riverctl map normal $mod T spawn "foot"
 riverctl map normal $mod+Alt B spawn "swaylock"
 # TODO real config file
-riverctl map normal $mod S spawn "fuzzel -f 'sans-serif' -T 'foot -e' -b '1d2021e0' -t 'ebdbb2ff' -m 'fb3934ff' -s '3c3836f0' -S 'ebdbb2ff' -B 3 -C 'b8bb26ff'"
+riverctl map normal $mod S spawn "fuzzel"
 
 # both locked and unl
 for mode in normal locked; do

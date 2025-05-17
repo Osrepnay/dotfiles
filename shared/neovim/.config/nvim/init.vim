@@ -27,7 +27,7 @@ autocmd InsertLeave * :set relativenumber
 
 let g:vimsyn_embed = 'l'
 
-let g:conjure#filetypes = ['clojure', 'fennel', 'janet', 'hy', 'julia', 'racket', 'scheme', 'lua', 'lisp', 'python', 'sql']
+let g:conjure#filetypes = ['clojure', 'lua', 'python'] " fennel', 'janet', 'hy', 'julia', 'racket', 'scheme', 'lua', 'lisp', 'python', 'sql']
 " lsp should take care of this, keybinds overlap
 let g:conjure#mapping#def_word = v:false
 let g:conjure#mapping#doc_word = v:false
