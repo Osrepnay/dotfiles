@@ -25,6 +25,7 @@ nnoremap <leader>bT :bprevious<CR>
 autocmd InsertEnter * :set norelativenumber
 autocmd InsertLeave * :set relativenumber
 
+" embedded lua highlighting
 let g:vimsyn_embed = 'l'
 
 let g:conjure#filetypes = ['clojure', 'lua', 'python'] " fennel', 'janet', 'hy', 'julia', 'racket', 'scheme', 'lua', 'lisp', 'python', 'sql']

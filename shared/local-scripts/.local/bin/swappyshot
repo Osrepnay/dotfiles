@@ -1,0 +1,10 @@
+#!/bin/sh
+FILE="/tmp/$(head -c10 /dev/urandom | base32).png"
+grim $FILE
+imv -f $FILE &
+IMVPID=$!
+mogrify -crop $(slurp -f '%wx%h+%x+%y') $FILE
+kill $IMVPID
+swappy -f $FILE
+# satty -f $FILE
+rm $FILE

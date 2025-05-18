@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+command=$(echo -e "Suspend\nShutdown" | fuzzel --dmenu)
+case $command in
+    Suspend) systemctl suspend;;
+    Shutdown) shutdown now;;
+esac

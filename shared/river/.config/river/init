@@ -71,9 +71,10 @@ riverctl map normal $mod+Shift 0 set-view-tags $all_tags
 
 # apps
 riverctl map normal $mod T spawn "foot"
-riverctl map normal $mod+Alt B spawn "swaylock"
-# TODO real config file
 riverctl map normal $mod S spawn "fuzzel"
+
+riverctl map normal $mod+Alt B spawn "swaylock"
+riverctl map normal $mod+Alt V spawn "power"
 
 # both locked and unl
 for mode in normal locked; do
