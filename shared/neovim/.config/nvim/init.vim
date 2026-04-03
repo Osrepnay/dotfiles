@@ -12,12 +12,10 @@ let c_no_curly_error = 1 " compound literal highlighting broke
 
 filetype plugin indent on
 
-inoremap jk <esc>
-inoremap Jk <esc>
-inoremap jK <esc>
-inoremap JK <esc>
+set undofile
 
-nnoremap <leader>bb :buffers<CR>:buffer<Space>
+" nnoremap <leader>bb :buffers<CR>:buffer<Space>
+nnoremap <leader>bb <cmd>Telescope buffers<CR>
 nnoremap <leader>bd :buffers<CR>:bdelete<Space>
 nnoremap <leader>bt :bnext<CR>
 nnoremap <leader>bT :bprevious<CR>
@@ -53,9 +51,16 @@ Plug 'nvim-lualine/lualine.nvim'
 
 Plug 'kwkarlwang/bufresize.nvim'
 
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
+
 " Plug 'morhetz/gruvbox'
 " https://github.com/morhetz/gruvbox/issues/459
 Plug 'ellisonleao/gruvbox.nvim'
+
+Plug 'wakatime/vim-wakatime'
+
+Plug 'alec-gibson/nvim-tetris'
 
 call plug#end()
 
@@ -73,9 +78,15 @@ local bufresize = require('bufresize')
 
 cmp.setup({
     snippet = {
-        expand = function() end
+        expand = function(args)
+            vim.snippet.expand(args.body)
+        end
     },
-    window = {},
+    window = {
+        completion = {
+           max_height = 6 
+        }
+    },
     mapping = cmp.mapping.preset.insert({
         ['<Tab>'] = function(fallback)
             if cmp.visible() then
@@ -95,7 +106,7 @@ cmp.setup({
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.abort(),
-        ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     }),
     sources = cmp.config.sources({{ name = 'nvim_lsp' }}, {{ name = 'buffer' }})
 })
@@ -170,6 +181,7 @@ conform.setup({
     formatters_by_ft = {
         clojure = { "zprint" },
         haskell = { "ormolu" },
+        rust = { "rustfmt" },
     }
 })
 

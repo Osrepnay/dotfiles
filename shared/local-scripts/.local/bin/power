@@ -2,8 +2,10 @@
 
 set -e
 
-command=$(echo -e "Suspend\nShutdown" | fuzzel --dmenu)
+command=$(echo -e "Suspend and lock\nSuspend\nLock\nShutdown" | fuzzel --dmenu)
 case $command in
+    "Suspend and lock") swaylock & systemctl suspend;;
     Suspend) systemctl suspend;;
+    Lock) swaylock;;
     Shutdown) shutdown now;;
 esac

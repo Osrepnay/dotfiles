@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [[ -n "$WAYLAND_DISPLAY" ]]; then
+    foot -e "$@"
+else
+    xterm -e "$@"
+fi

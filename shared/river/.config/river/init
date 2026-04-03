@@ -76,12 +76,12 @@ riverctl map normal $mod S spawn "fuzzel"
 riverctl map normal $mod+Alt B spawn "swaylock"
 riverctl map normal $mod+Alt V spawn "power"
 
+riverctl map normal None Print spawn "swappyshot"
+riverctl map normal Shift Print spawn "colorpick"
+riverctl map normal $mod+Shift E spawn "BEMOJI_PICKER_CMD='fuzzel -d' bemoji -t"
+
 # both locked and unl
 for mode in normal locked; do
-    riverctl map $mode None Print spawn "swappyshot"
-    # screenshot without slurp
-    riverctl map $mode Shift Print spawn "grim - | swappy -f -"
-
     # TODO pipewire
     riverctl map $mode None XF86AudioRaiseVolume  spawn 'pamixer -i 5'
     riverctl map $mode None XF86AudioLowerVolume  spawn 'pamixer -d 5'
@@ -157,5 +157,5 @@ wlsunset -t 4800 -T 4801 &
 waybar &
 mako &
 swaybg -i ~/bgs/alpenglow.jpg -m fill &
-lxpolkit &
+lxqt-policykit-agent &
 rivercarro -main-ratio 0.5 -inner-gaps 16 -outer-gaps 16 &
